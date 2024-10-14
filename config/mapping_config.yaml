@@ -1,0 +1,37 @@
+mapping_node:
+  ros__parameters:
+
+    input_topic: /grid_map
+    output_topic: /filtered_map
+
+    filters:
+      filter1:
+        name: buffer_normalizer
+        type: gridMapFilters/BufferNormalizerFilter
+
+      filter2: # Duplicate layer.
+        name: inverter
+        type: gridMapFilters/MathExpressionFilter
+        params:
+          output_layer: elevation
+          expression: -elevation
+          # expression: abs(elevation - elevation_smooth) # Surface roughness.
+          # expression: 0.5 * (1.0 - (slope / 0.6)) + 0.5 * (1.0 - (roughness / 0.1)) # Weighted and normalized sum.
+      
+      filter3: # Duplicate layer.
+        name: obstacle_dup
+        type: gridMapFilters/DuplicationFilter
+        params:
+          input_layer: elevation
+          output_layer: obstacle_a
+
+
+      filter4: # Duplicate layer.
+        name: obstacle_a
+        type: gridMapFilters/ObstacleFilter
+        params:
+          layer: elevation
+          length: 5.0
+          width: 5.0
+          height: 5.0
+          output_layer: obstacle_a

@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="obstacle_filter">
+    <class name="gridMapFilters/ObstacleFilter" type="grid_map::ObstacleFilter&lt;grid_map::GridMap&gt;" base_class_type="filters::FilterBase&lt;grid_map::GridMap&gt;">
+      <description>
+        Add obstacle to gridmap
+      </description>
+    </class>
+  </library>
+</class_libraries>
