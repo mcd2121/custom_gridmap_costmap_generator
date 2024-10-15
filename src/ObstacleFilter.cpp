@@ -12,12 +12,6 @@ namespace grid_map
 
 template<typename T>
 ObstacleFilter<T>::ObstacleFilter()
-: length_(0.0),
-  width_(1.0),
-  radius_(0.5),
-  poseX_(1.5),
-  poseY_(1.5),
-  circular_obstacle_(false)
 {
     
 }
@@ -31,37 +25,15 @@ template<typename T>
 bool ObstacleFilter<T>::configure()
 {
   ParameterReader param_reader(this->param_prefix_, this->params_interface_);
-
-  if (param_reader.get(std::string("length"), length_)) {
-    circular_obstacle_ = false;
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "length_ = %f", length_);
-  }
-  if (param_reader.get(std::string("width"), width_)) {
-    circular_obstacle_ = false;
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "width_ = %f", width_);
-  }
-  if (param_reader.get(std::string("radius"), radius_)) {
-    circular_obstacle_ = true;
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "radius_ = %f", radius_);
-  }
-
-  if (param_reader.get(std::string("height"), height_)) {
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "height_ = %f", height_);
-  }
-  if (param_reader.get(std::string("poseX"), poseX_)) {
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "poseX_ = %f", poseX_);
-  }
-  if (param_reader.get(std::string("poseY"), poseY_)) {
-    RCLCPP_DEBUG(this->logging_interface_->get_logger(), "poseY_ = %f", poseY_);
-  }
-
+// Read the list of obstacles.
+  param_reader.get(std::string("obstacles"), obstacles_);
 
   if (!param_reader.get(std::string("layer"), layer_)) {
     RCLCPP_ERROR(
       this->logging_interface_->get_logger(), "ObstacleFilter did not find parameter 'layer'.");
     return false;
   }
-    
+
   if (!param_reader.get(std::string("output_layer"), output_layer_)) {
     RCLCPP_ERROR(
       this->logging_interface_->get_logger(), "ObstacleFilter did not find parameter 'output_layer'.");
@@ -84,22 +56,44 @@ bool ObstacleFilter<T>::update(const T & mapIn, T & mapOut)
     return false;
   }
 
-  // For each cell in map.  
-  grid_map::Polygon polygon;
-  polygon.setFrameId(mapOut.getFrameId());
-  polygon.addVertex(grid_map::Position( poseX_-(length_/2.0), poseY_+(width_/2.0) ));
-  polygon.addVertex(grid_map::Position( poseX_+(length_/2.0), poseY_+(width_/2.0) ));
-  polygon.addVertex(grid_map::Position( poseX_+(length_/2.0), poseY_-(width_/2.0) ));
-  polygon.addVertex(grid_map::Position( poseX_-(length_/2.0), poseY_-(width_/2.0) ));
-
   mapOut.add(output_layer_);
-
   mapOut[output_layer_] = mapOut[layer_];
-  for (grid_map::PolygonIterator iterator(mapOut, polygon);
-    !iterator.isPastEnd(); ++iterator)
-  {
-    mapOut.at(output_layer_, *iterator) = height_;
-    
+
+  for (const auto & obstacle : obstacles_) {
+    double poseX = obstacle[0];
+    double poseY = obstacle[1];
+    double length = obstacle[2];
+    double width = obstacle[3];
+    double height = obstacle[4];
+    double radius = obstacle[5];
+    int type = static_cast<int>(obstacle[6]);  // 0 for rectangle, 1 for circular
+
+    if (type == 0) {
+      // Rectangular obstacle
+      grid_map::Polygon polygon;
+      polygon.setFrameId(mapOut.getFrameId());
+      polygon.addVertex(grid_map::Position(poseX - (length / 2.0), poseY + (width / 2.0)));
+      polygon.addVertex(grid_map::Position(poseX + (length / 2.0), poseY + (width / 2.0)));
+      polygon.addVertex(grid_map::Position(poseX + (length / 2.0), poseY - (width / 2.0)));
+      polygon.addVertex(grid_map::Position(poseX - (length / 2.0), poseY - (width / 2.0)));
+
+      // Iterate over the polygon area and apply the obstacle height
+      for (grid_map::PolygonIterator iterator(mapOut, polygon);
+           !iterator.isPastEnd(); ++iterator)
+      {
+        mapOut.at(output_layer_, *iterator) = height;
+      }
+    } else if (type == 1) {
+      // Circular obstacle
+      grid_map::Circle circle(grid_map::Position(poseX, poseY), radius);
+
+      // Iterate over the circular area and apply the obstacle height
+      for (grid_map::CircleIterator iterator(mapOut, circle);
+           !iterator.isPastEnd(); ++iterator)
+      {
+        mapOut.at(output_layer_, *iterator) = height;
+      }
+    }
   }
 
   return true;

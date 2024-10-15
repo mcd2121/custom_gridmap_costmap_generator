@@ -45,24 +45,8 @@ private:
   std::string layer_;
   std::string output_layer_;
   
-  //! Length
-  double length_;
+  std::vector<std::vector<double>> obstacles_;
 
-  //! Width
-  double width_;
-
-  //! Radious
-  double radius_;
-
-  //! If threshold triggered set to this value
-  double height_;
-
-  double poseX_;
-  double poseY_;
-
-
-  //! Booleans to decide which threshold should be used.
-  bool circular_obstacle_;
 };
 
 }  // namespace grid_map
