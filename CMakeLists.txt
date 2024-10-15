@@ -37,7 +37,8 @@ set(dependencies
 )
 
 set(filter_libs
-  obstacle_filter
+  # obstacle_filter
+  multi_obstacle_filter
 )
 
 include_directories(
@@ -46,7 +47,8 @@ include_directories(
     ${EIGEN3_INCLUDE_DIR}
 )
 # ==================================
-add_library(obstacle_filter SHARED src/ObstacleFilter.cpp)
+# add_library(obstacle_filter SHARED src/ObstacleFilter.cpp)
+add_library(multi_obstacle_filter SHARED src/MultiObstacleFilter.cpp)
 
 foreach(lib_name ${filter_libs})
   ament_target_dependencies(${lib_name} SYSTEM

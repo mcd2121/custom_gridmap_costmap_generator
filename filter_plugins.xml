@@ -6,4 +6,12 @@
       </description>
     </class>
   </library>
+
+  <library path="multi_obstacle_filter">
+    <class name="gridMapFilters/MultiObstacleFilter" type="grid_map::MultiObstacleFilter&lt;grid_map::GridMap&gt;" base_class_type="filters::FilterBase&lt;grid_map::GridMap&gt;">
+      <description>
+        Add multi obstacle to gridmap
+      </description>
+    </class>
+  </library>
 </class_libraries>

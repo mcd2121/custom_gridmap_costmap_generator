@@ -4,7 +4,12 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
+        - /Axes1
+        - /Elevation2
         - /GridMap1
+        - /Grid1
+        - /Map1
       Splitter Ratio: 0.6114649772644043
     Tree Height: 820
   - Class: rviz_common/Selection
@@ -24,12 +29,12 @@ Visualization Manager:
   Class: ""
   Displays:
     - Class: rviz_default_plugins/Axes
-      Enabled: false
-      Length: 0.20000000298023224
+      Enabled: true
+      Length: 30
       Name: Axes
-      Radius: 0.009999999776482582
+      Radius: 0.5
       Reference Frame: <Fixed Frame>
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Class: grid_map_rviz_plugin/GridMap
@@ -177,7 +182,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Elevation
       Topic:
         Depth: 5
@@ -193,14 +198,14 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /traversability_grid_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Class: grid_map_rviz_plugin/GridMap
       Color: 200; 200; 200
       Color Layer: obstacle_a
       Color Transformer: GridMapLayer
-      Enabled: true
+      Enabled: false
       Height Layer: obstacle_a
       Height Transformer: Layer
       History Length: 1
@@ -219,9 +224,9 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /filtered_map
       Use Rainbow: true
-      Value: true
+      Value: false
     - Alpha: 0.5
-      Cell Size: 1
+      Cell Size: 5
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
       Enabled: true
@@ -235,9 +240,30 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 50
       Reference Frame: <Fixed Frame>
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /traversability_grid
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /traversability_grid_updates
+      Use Timestamp: false
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 255; 255; 255
@@ -283,26 +309,21 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz_default_plugins/XYOrbit
-      Distance: 20.25949478149414
+      Angle: 0
+      Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.45479628443717957
+      Scale: 7.18076753616333
       Target Frame: <Fixed Frame>
-      Value: XYOrbit (rviz_default_plugins)
-      Yaw: 5.197393417358398
+      Value: TopDownOrtho (rviz_default_plugins)
+      X: 14.506311416625977
+      Y: -30.996387481689453
     Saved: ~
 Window Geometry:
   Displays:
