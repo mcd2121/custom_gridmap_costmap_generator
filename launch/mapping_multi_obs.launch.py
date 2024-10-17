@@ -52,9 +52,9 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             # 'image_path': os.path.join(custom_gridmap_costmap_generator_dir, 'data', 'image.png'),
-            # 'image_path': os.path.join(custom_gridmap_costmap_generator_dir, 'data', 'terrain.png'),
             'image_path': os.path.join(custom_gridmap_costmap_generator_dir, 'data', 'terrain.png'),
-            'topic': 'image'
+            # 'image_path': os.path.join(custom_gridmap_costmap_generator_dir, 'data',   'willowgarage_perfect500x500.png'),
+            'topic': 'image_raw'
         }]
     )
 
@@ -91,8 +91,8 @@ def generate_launch_description():
     ld.add_action(declare_rviz_config_file_cmd)
 
     # Add node actions to the launch description
-    ld.add_action(grid_map_filter_node)
-    # ld.add_action(image_publisher_node)
+    # ld.add_action(grid_map_filter_node)
+    ld.add_action(image_publisher_node)
     ld.add_action(image_to_gridmap_node)
     ld.add_action(grid_map_visualization_node)
     ld.add_action(rviz2_node)

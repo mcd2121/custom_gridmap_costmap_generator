@@ -7,6 +7,7 @@
 #include <sensor_msgs/msg/image.hpp>
 
 #include <grid_map_ros/grid_map_ros.hpp>
+#include <filters/filter_chain.hpp>
 
 #include <string>
 
@@ -40,6 +41,8 @@ public:
   void imageCallback(const sensor_msgs::msg::Image::SharedPtr msg);
 
 private:
+
+
   //! Grid map publisher.
   rclcpp::Publisher<grid_map_msgs::msg::GridMap>::SharedPtr gridMapPublisher_;
 
@@ -51,6 +54,8 @@ private:
 
   //! Name of the grid map topic.
   std::string imageTopic_;
+  std::string outputTopic_;
+
 
   //! Resolution of the grid map.
   double resolution_;
@@ -63,6 +68,11 @@ private:
   std::string mapFrameId_;
 
   bool mapInitialized_;
+      //! Filter chain.
+  filters::FilterChain<grid_map::GridMap> filterChain_;
+
+  //! Filter chain parameters name.
+  std::string filterChainParametersName_;
 };
 
 }  // namespace CUSTOM_GRIDMAP_COSTMAP_GENERATOR
